@@ -22,10 +22,9 @@ typedef enum
     REAL,
     MIENTRAS,
     SI,
-    SINO,
     REPETIR,
     HASTA,
-    //No se si son los que piden especificamente pero me parecian que era los que deberia agregar 
+     
     PARENIZQUIERDO,
     PARENDERECHO,
     PUNTOYCOMA,
@@ -33,13 +32,6 @@ typedef enum
     ASIGNACION,
     SUMA,
     RESTA,
-    //Si agregamos Mientras y Si entonces debemos agregar los tipos de datos de comparacion
-    IGUAL,
-    DIFERENTE,
-    MENOR,
-    MAYOR,
-    MENORIGUAL,
-    MAYORIGUAL,
     FDT,
     ERRORLEXICO
 } TOKEN;
@@ -60,7 +52,6 @@ RegTS TS[1000] = {
     {"real", REAL},
     {"mientras", MIENTRAS}, 
     {"si", SI}, 
-    {"sino", SINO}, 
     {"repetir", REPETIR}, 
     {"hasta", HASTA},
     {"$", 99}
@@ -189,7 +180,15 @@ void ListaSentencias(void)
         case ESCRIBIR:
             Sentencia();
             break;
-        
+        case MIENTRAS:
+            Sentencia();
+            break;
+        case SI:
+            Sentencia();
+            break;
+        case REPETIR:
+            Sentencia();
+            break;
         default:
             return; // si no es sentencia termina la funcion
         }           // fin del switch
@@ -222,6 +221,34 @@ void Sentencia(void)
         Match(PARENIZQUIERDO);
         ListaExpresiones();
         Match(PARENDERECHO);
+        Match(PUNTOYCOMA);
+        break;
+    case MIENTRAS: /* <sentencia> -> MIENTRAS ( <condicion> ) <sentencia> */
+        Match(MIENTRAS);
+        Match(PARENIZQUIERDO);
+        ListaExpresiones();
+        Match(PARENDERECHO);
+        //No se si lo tengo bien esta parte la sabe Lu que se leyo el pdf
+        ListaExpresiones();
+        Match(PUNTOYCOMA);
+        break;
+    case SI: /* <sentencia> -> MIENTRAS ( <condicion> ) <sentencia> */
+        Match(SI);
+        Match(PARENIZQUIERDO);
+        ListaExpresiones();
+        Match(PARENDERECHO);
+        //No se si lo tengo bien esta parte la sabe Lu que se leyo el pdf
+        ListaExpresiones();
+        Match(PUNTOYCOMA);
+        break;
+    case REPETIR: /* <sentencia> -> REPETIR ( <condicion> ) <sentencia> HASTA*/
+        Match(REPETIR);
+        Match(PARENIZQUIERDO);
+        ListaExpresiones();
+        Match(PARENDERECHO);
+        //No se si lo tengo bien esta parte la sabe Lu que se leyo el pdf
+        ListaExpresiones();
+        Match(HASTA);
         Match(PUNTOYCOMA);
         break;
     default:
@@ -486,6 +513,8 @@ void Asignar(REG_EXPRESION izq, REG_EXPRESION der)
     /* Genera la instruccion para la asignacion */
     Generar("Almacena", Extraer(&der), izq.nombre, "");
 }
+
+//hay que modificar la tabla y switch ya que agregariamos los signos de disyuncion
 
 /**************************Scanner************************************/
 TOKEN scanner()
