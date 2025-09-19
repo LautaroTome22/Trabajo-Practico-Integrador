@@ -341,7 +341,7 @@ void OperadorAditivo(char *presul)
         strcpy(presul, ProcesarOp());
     }
     else
-        ErrorSintactico(t);
+        ErrorSintactico();
 }
 /**********************Rutinas Semanticas******************************/
 
