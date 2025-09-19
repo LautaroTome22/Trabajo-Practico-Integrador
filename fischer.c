@@ -177,16 +177,10 @@ void ListaSentencias(void)
         {
         case ID:
         case LEER:
-        case ESCRIBIR:
-            Sentencia();
-            break;
         case MIENTRAS:
-            Sentencia();
-            break;
         case SI:
-            Sentencia();
-            break;
         case REPETIR:
+        case ESCRIBIR:
             Sentencia();
             break;
         default:
@@ -228,27 +222,24 @@ void Sentencia(void)
         Match(PARENIZQUIERDO);
         ListaExpresiones();
         Match(PARENDERECHO);
-        //No se si lo tengo bien esta parte la sabe Lu que se leyo el pdf
         ListaExpresiones();
         Match(PUNTOYCOMA);
         break;
-    case SI: /* <sentencia> -> MIENTRAS ( <condicion> ) <sentencia> */
+    case SI: /* <sentencia> -> SI ( <condicion> ) <sentencia> */
         Match(SI);
         Match(PARENIZQUIERDO);
         ListaExpresiones();
         Match(PARENDERECHO);
-        //No se si lo tengo bien esta parte la sabe Lu que se leyo el pdf
         ListaExpresiones();
         Match(PUNTOYCOMA);
         break;
-    case REPETIR: /* <sentencia> -> REPETIR ( <condicion> ) <sentencia> HASTA*/
+    case REPETIR: /* <sentencia> -> REPETIR ( <sentencia> ) HASTA <condicion>*/
         Match(REPETIR);
         Match(PARENIZQUIERDO);
         ListaExpresiones();
         Match(PARENDERECHO);
-        //No se si lo tengo bien esta parte la sabe Lu que se leyo el pdf
-        ListaExpresiones();
         Match(HASTA);
+        ListaExpresiones();
         Match(PUNTOYCOMA);
         break;
     default:
