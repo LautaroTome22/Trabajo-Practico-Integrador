@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
+#include <stdlib.h>
 
 #define NUMESTADOS 15
 #define NUMCOLS 13
@@ -61,7 +62,7 @@ typedef struct
 {
     TOKEN clase;
     char nombre[TAMLEX];
-    int valor;
+    double valor;
 } REG_EXPRESION;
 
 char buffer[TAMLEX];
@@ -343,7 +344,18 @@ ProcesarCte(void)
     REG_EXPRESION reg;
     reg.clase = CONSTANTE;
     strcpy(reg.nombre, buffer);
-    sscanf(buffer, "%d", &reg.valor);
+
+    if(buffer[0] == '\'' && buffer[2] == '\''){
+        //no creo que este bien
+        char c;
+        sscanf(buffer, "'%c'", &c);
+        reg.valor = (double)c;
+    }
+    else{
+        sscanf(buffer, "%lf", &reg.valor);
+    }
+
+    
     return reg;
 }
 
@@ -366,13 +378,30 @@ char *ProcesarOp(void)
 void Leer(REG_EXPRESION in)
 {
     /* Genera la instruccion para leer */
-    Generar("Read", in.nombre, "Entera", "");
+    if(in.nombre[0] == '\''){
+        Generar("Read", in.nombre, "Caracter", "");
+    }
+    else if(strchr(in.nombre, '.')){
+        Generar("Read", in.nombre, "Real", "");
+    }
+    else{
+        Generar("Read", in.nombre, "Entera", "");
+    }
 }
 
 void Escribir(REG_EXPRESION out)
 {
     /* Genera la instruccion para escribir */
-    Generar("Write", Extraer(&out), "Entera", "");
+    //no se si esta correcto
+    if(out.clase == CARACTER){
+        Generar("Write", Extraer(&out), "Caracter", "");
+    }
+    else if(strchr(Extraer(&out), '.')){
+        Generar("Write", Extraer(&out), "Real", "");
+    }
+    else{
+        Generar("Write", Extraer(&out), "Entera", "");
+    }
 }
 
 REG_EXPRESION GenInfijo(REG_EXPRESION e1, char *op, REG_EXPRESION e2)
@@ -484,7 +513,18 @@ void Chequear(char *s)
     if (!Buscar(s, TS, &t))
     {
         Colocar(s, TS);
-        Generar("Declara", s, "Entera", "");
+        if (strchr(s, '\'') != NULL) {
+            // Si contiene comillas simples, es un carácter
+            Generar("Declara", s, "Caracter", "");
+        }
+        else if (strchr(s, '.') != NULL) {
+            // Si contiene punto decimal, es real
+            Generar("Declara", s, "Real", "");
+        }
+        else {
+            // Por defecto, entera
+            Generar("Declara", s, "Entera", "");
+        }
     }
 }
 

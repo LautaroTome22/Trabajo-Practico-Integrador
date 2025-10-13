@@ -4,33 +4,52 @@
 #include <stdio.h> 
 #include <string.h> 
 %} 
+
 /* Definiciones de expresiones regulares */ 
+
 letra [a-zA-Z] 
 digito [0-9] 
 identificador {letra}({letra}|{digito})* 
-constante {digito}+ 
+real    {digito}+"."{digito}+
+constante {digito}+
+caracter \'[ -~]\'
+
 %% 
 /* Reglas de token y acciones asociadas */ 
-"inicio"       
-"fin"          
-"leer"         
-"escribir"     
-return INICIO; 
-return FIN; 
-return LEER; 
-return ESCRIBIR; 
+"inicio"        { return INICIO; }
+"fin"           { return FIN; }
+"leer"          { return LEER; }
+"escribir"      { return ESCRIBIR; }
+"caracter"      { return CARACTER; }
+"real"          { return REAL; }
+"mientras"      { return MIENTRAS; }
+"si"            { return SI; }
+"repetir"       { return REPETIR; }
+"hasta"         { return HASTA; }
+"caracter"      { return CARACTER; }
+
+
 {identificador} { 
 /* Aquí se podría llamar a una rutina semántica 
 * para buscar en la tabla de símbolos y retornar 
 * ID o una palabra reservada, como se hace en el 
 * código C manual del documento. */ 
 yylval.str = strdup(yytext); 
+
 return ID; 
 } 
 {constante}    { 
     yylval.str = strdup(yytext); 
     return CONSTANTE; 
 } 
+{real}          {
+    yylval.str = strdup(yytext); 
+    return CONSTANTE; 
+}
+
+{caracter}    { yylval.str = strdup(yytext); return CONSTANTE; }
+
+
 ":="           return ASIGNACION; 
 "+"            return SUMA; 
 "-"            return RESTA; 

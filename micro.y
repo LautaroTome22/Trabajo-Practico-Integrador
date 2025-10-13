@@ -13,7 +13,7 @@ extern RegTS TS;
 char *str; 
 } 
 // Declaraciones de tokens (terminales) 
-%token INICIO FIN LEER ESCRIBIR ID CONSTANTE PARENIZQUIERDO 
+%token INICIO FIN LEER ESCRIBIR ID CONSTANTE REAL CARACTER MIENTRAS SI REPETIR HASTA PARENIZQUIERDO 
 PARENDERECHO PUNTOYCOMA COMA ASIGNACION SUMA RESTA FDT 
 // Símbolo de inicio de la gramática 
 %start objetivo 
@@ -75,7 +75,7 @@ expresion : primaria
 { 
     $$ = GenInfijo($1, "-", $3); 
 }; 
- 
+
 primaria : identificador 
  
 | CONSTANTE 
