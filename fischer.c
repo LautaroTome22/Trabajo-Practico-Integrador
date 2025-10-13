@@ -5,7 +5,7 @@
 #include <stdlib.h>
 
 #define NUMESTADOS 15
-#define NUMCOLS 13
+#define NUMCOLS 14
 #define TAMLEX 32 + 1
 #define TAMNOM 20 + 1
 /******************Declaraciones Globales*************************/
