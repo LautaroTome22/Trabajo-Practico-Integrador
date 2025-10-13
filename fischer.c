@@ -4,7 +4,7 @@
 #include <ctype.h>
 #include <stdlib.h>
 
-#define NUMESTADOS 15
+#define NUMESTADOS 16
 #define NUMCOLS 14
 #define TAMLEX 32 + 1
 #define TAMNOM 20 + 1
