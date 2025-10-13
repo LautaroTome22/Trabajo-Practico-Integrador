@@ -551,22 +551,23 @@ void Asignar(REG_EXPRESION izq, REG_EXPRESION der)
 TOKEN scanner()
 {
     int tabla[NUMESTADOS][NUMCOLS] =
-        //L   D   +   -   (   )   ,   ;   :   =   EOF ´ ´ OTRO
-        {{1,  3,  5,  6,  7,  8,  9,  10, 11, 14, 13, 0,  14},
-         {1,  1,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2 },
-         {14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14},
-         {4,  3,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4 },
-         {14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14},
-         {14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14},
-         {14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14},
-         {14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14},
-         {14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14},
-         {14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14},
-         {14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14},
-         {14, 14, 14, 14, 14, 14, 14, 14, 14, 12, 14, 14, 14},
-         {14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14},
-         {14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14},
-         {14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14}};
+        //L   D   +   -   (   )   .   ,   ;   :   =   EOF ´ ´ OTRO
+        {{1,  3,  5,  7,  8,  9,  15, 10, 11, 12, 15, 14, 0,  15},
+         {1,  1,  2,  2,  2,  2,  15, 2,  2,  2,  2,  2,  2,  2 },
+         {15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15},
+         {4,  3,  4,  4,  4,  4,  3, 4,  4,  4,  4,  4,  4,  4 },
+         {15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15},
+         {15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15},
+         {15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15}, //AGREGADA .
+         {15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15},
+         {15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15},
+         {15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15},
+         {15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15},
+         {15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15},
+         {15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 13, 15, 15, 15},
+         {15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15},
+         {15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15},
+         {15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15}};
     int car;
     int col;
     int estado = 0;
@@ -576,24 +577,24 @@ TOKEN scanner()
         car = fgetc(in);
         col = columna(car);
         estado = tabla[estado][col];
-        if (col != 11)
+        if (col != 12)
         { // si es espacio no lo agrega al buffer
             buffer[i] = car;
             i++;
         }
-    } while (!estadoFinal(estado) && !(estado == 14));
+    } while (!estadoFinal(estado) && !(estado == 15));
     buffer[i] = '\0'; // complete la cadena
     switch (estado)
     {
     case 2:
-        if (col != 11)
+        if (col != 12)
         {                    // si el carácter espureo no es blanco…
             ungetc(car, in); // lo retorna al flujo
             buffer[i - 1] = '\0';
         }
         return ID;
     case 4:
-        if (col != 11)
+        if (col != 12)
         {
             ungetc(car, in);
             buffer[i - 1] = '\0';
@@ -607,15 +608,15 @@ TOKEN scanner()
         return PARENIZQUIERDO;
     case 8:
         return PARENDERECHO;
-    case 9:
-        return COMA;
     case 10:
+        return COMA;
+    case 11:
         return PUNTOYCOMA;
-    case 12:
-        return ASIGNACION;
     case 13:
-        return FDT;
+        return ASIGNACION;
     case 14:
+        return FDT;
+    case 15:
         return ERRORLEXICO;
     }
     return 0;
@@ -623,12 +624,12 @@ TOKEN scanner()
 
 int estadoFinal(int e)
 {
-    if (e == 0 || e == 1 || e == 3 || e == 11 || e == 14)
+    if (e == 0 || e == 1 || e == 3 || e == 12 || e == 15)
         return 0;
     return 1;
 }
 
-int columna(int c)
+int columna(int c) //agregar .
 {
     if (isalpha(c))
         return 0;
@@ -642,19 +643,21 @@ int columna(int c)
         return 4;
     if (c == ')')
         return 5;
-    if (c == ',')
+    if (c == '.')
         return 6;
-    if (c == ';')
+    if (c == ',')
         return 7;
-    if (c == ':')
+    if (c == ';')
         return 8;
-    if (c == '=')
+    if (c == ':')
         return 9;
-    if (c == EOF)
+    if (c == '=')
         return 10;
-    if (isspace(c))
+    if (c == EOF)
         return 11;
-    return 12;
+    if (isspace(c))
+        return 12;
+    return 13;
 }
 /*************Fin Scanner**********************************************/
 
