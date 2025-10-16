@@ -29,8 +29,8 @@ programa : INICIO listaSentencias FIN
 { 
 Comenzar(); 
 }; 
-listaSentencias : sentencia 
-| listaSentencias sentencia ; 
+listaSentencias : sentencia
+| listaSentencias sentencia ;
 sentencia : identificador ASIGNACION expresion PUNTOYCOMA 
 { 
 Asignar($1, $3); 
