@@ -12,7 +12,7 @@ extern RegTS TS;
 %union { 
 char *str; 
 } 
-// Declaraciones de tokens (terminales) 
+// Hola Declaraciones de tokens (terminales) 
 %token INICIO FIN LEER ESCRIBIR ID CONSTANTE REAL CARACTER MIENTRAS SI REPETIR HASTA PARENIZQUIERDO 
 PARENDERECHO PUNTOYCOMA COMA ASIGNACION SUMA RESTA FDT 
 // Símbolo de inicio de la gramática 

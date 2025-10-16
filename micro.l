@@ -30,7 +30,7 @@ caracter \'[ -~]\'
 
 
 {identificador} { 
-/* Aquí se podría llamar a una rutina semántica 
+/* Hola Aquí se podría llamar a una rutina semántica 
 * para buscar en la tabla de símbolos y retornar 
 * ID o una palabra reservada, como se hace en el 
 * código C manual del documento. */ 
