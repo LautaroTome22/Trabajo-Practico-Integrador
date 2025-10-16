@@ -378,29 +378,41 @@ char *ProcesarOp(void)
 void Leer(REG_EXPRESION in)
 {
     /* Genera la instruccion para leer */
-    if(in.nombre[0] == '\''){
+    switch (in.clase)
+    {
+    case CARACTER:
         Generar("Read", in.nombre, "Caracter", "");
-    }
-    else if(strchr(in.nombre, '.')){
+        break;
+    case REAL:
         Generar("Read", in.nombre, "Real", "");
-    }
-    else{
+        break;
+    case CONSTANTE:
         Generar("Read", in.nombre, "Entera", "");
+    default:
+        Generar("Read", in.nombre, "Entera", "");
+        break;
     }
+    
 }
 
 void Escribir(REG_EXPRESION out)
 {
     /* Genera la instruccion para escribir */
     //no se si esta correcto
-    if(out.clase == CARACTER){
+    switch (out.clase)
+    {
+    case CARACTER:
         Generar("Write", Extraer(&out), "Caracter", "");
-    }
-    else if(strchr(Extraer(&out), '.')){
-        Generar("Write", Extraer(&out), "Real", "");
-    }
-    else{
+        break;
+    case REAL:
+        Generar("Write", Extraer(&out), "Caracter", "");
+        break;
+    case CONSTANTE:
         Generar("Write", Extraer(&out), "Entera", "");
+        break;
+    default:
+        Generar("Write", Extraer(&out), "Entera", "");
+        break;
     }
 }
 
@@ -513,18 +525,23 @@ void Chequear(char *s)
     if (!Buscar(s, TS, &t))
     {
         Colocar(s, TS);
-        if (strchr(s, '\'') != NULL) {
-            // Si contiene comillas simples, es un carácter
+
+        switch (t)
+        {
+        case CARACTER:
             Generar("Declara", s, "Caracter", "");
-        }
-        else if (strchr(s, '.') != NULL) {
-            // Si contiene punto decimal, es real
+            break;
+        case REAL:
             Generar("Declara", s, "Real", "");
-        }
-        else {
-            // Por defecto, entera
+            break;
+        case CONSTANTE:
             Generar("Declara", s, "Entera", "");
+            break;
+        default:
+            Generar("Declara", s, "Entera", "");
+            break;
         }
+    
     }
 }
 
