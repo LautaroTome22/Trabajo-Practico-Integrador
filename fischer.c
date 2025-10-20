@@ -224,22 +224,18 @@ void Sentencia(void)
         Match(PARENIZQUIERDO);
         ListaExpresiones();
         Match(PARENDERECHO);
-        ListaExpresiones();
-        Match(PUNTOYCOMA);
+        Sentencia();
         break;
     case SI: /* <sentencia> -> SI ( <condicion> ) <sentencia> */
         Match(SI);
         Match(PARENIZQUIERDO);
         ListaExpresiones();
         Match(PARENDERECHO);
-        ListaExpresiones();
-        Match(PUNTOYCOMA);
+        Sentencia();
         break;
     case REPETIR: /* <sentencia> -> REPETIR ( <sentencia> ) HASTA <condicion>*/
         Match(REPETIR);
-        Match(PARENIZQUIERDO);
-        ListaExpresiones();
-        Match(PARENDERECHO);
+        Sentencia();
         Match(HASTA);
         ListaExpresiones();
         Match(PUNTOYCOMA);
