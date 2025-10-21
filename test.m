@@ -4,20 +4,9 @@ inicio
     
     c := a + b;
     
-    escribir(1.6);
+    escribir(1);
 
-    si (c) 
-        d := 10;
+    d := 1.3 - 2.4;
         
-    mientras (d)
-        d := d - 1;
-
-    escribir(d);
-    
-    repetir 
-        d := d + 2;
-    hasta (c); 
-    
-    escribir(d);
 
 fin

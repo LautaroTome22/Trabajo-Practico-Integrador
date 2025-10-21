@@ -334,28 +334,32 @@ void OperadorAditivo(char *presul)
 }
 /**********************Rutinas Semanticas******************************/
 
-REG_EXPRESION
-ProcesarCte(void)
+REG_EXPRESION ProcesarCte(void)
 {
     /* Convierte cadena que representa numero a entero y construye un registro semantico */
     REG_EXPRESION reg;
-    reg.clase = CONSTANTE;
-    strcpy(reg.nombre, buffer);
-
+    strcpy(reg.nombre, buffer); 
     if(buffer[0] == '\'' && buffer[2] == '\''){
-        //no creo que este bien
+        reg.clase = CARACTER;
         char c;
         sscanf(buffer, "'%c'", &c);
         reg.valor = (double)c;
     }
     else{
-        sscanf(buffer, "%lf", &reg.valor);
+        
+        sscanf(buffer, "%lf", &reg.valor); 
+        
+        
+        if (strchr(buffer, '.') != NULL) {
+            reg.clase = REAL; 
+        } else {
+            reg.clase = CONSTANTE; 
+        }
+        
     }
-
     
     return reg;
 }
-
 REG_EXPRESION ProcesarId(void)
 {
     /* Declara ID y construye el correspondiente registro semantico */
@@ -402,7 +406,7 @@ void Escribir(REG_EXPRESION out)
         Generar("Write", Extraer(&out), "Caracter", "");
         break;
     case REAL:
-        Generar("Write", Extraer(&out), "Caracter", "");
+        Generar("Write", Extraer(&out), "Real", "");
         break;
     case CONSTANTE:
         Generar("Write", Extraer(&out), "Entera", "");
